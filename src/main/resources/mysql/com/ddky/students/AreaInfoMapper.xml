@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ddky.fms.refund.mapper.students.AreaInfoMapper">
+
+    <sql id="area_column">
+        areaCode, areaName, parentCode, orderBy
+    </sql>
+
+    <sql id="where">
+        <if test="areaCode != null">
+            and areaCode = #{areaCode}
+        </if>
+        <if test="parentCode != null">
+            and parentCode = #{parentCode}
+        </if>
+        <if test="areaName != null">
+            and areaName = #{areaName}
+        </if>
+    </sql>
+
+    <select id="list" resultType="com.ddky.fms.refund.model.students.entry.AreaInfo">
+        select
+            <include refid="area_column" />
+        from stu_area_info
+        <where>
+            <include refid="where" />
+        </where>
+    </select>
+
+    <select id="listByNames" resultType="com.ddky.fms.refund.model.students.entry.AreaInfo">
+        select
+        <include refid="area_column" />
+        from stu_area_info
+        <where>
+            <if test="provinceName != null">
+                or areaName = #{provinceName}
+            </if>
+            <if test="cityName != null">
+                or areaName = #{cityName}
+            </if>
+            <if test="townName != null">
+                or areaName = #{townName}
+            </if>
+        </where>
+    </select>
+
+    <select id="findByCode" resultType="com.ddky.fms.refund.model.students.entry.AreaInfo">
+        select
+            <include refid="area_column" />
+        from stu_area_info
+        <where>
+            areaCode = #{areaCode}
+        </where>
+    </select>
+
+    <select id="findByCodeList" parameterType="List"
+            resultType="com.ddky.fms.refund.model.students.entry.AreaInfo">
+        select
+        <include refid="area_column" />
+        from stu_area_info
+        <where>
+            areaCode in <foreach collection="areaCodeList" index="index" item="item" open="(" close=")" separator=",">
+                            #{item}
+                        </foreach>
+        </where>
+    </select>
+
+    <select id="findMaxNodeByParentCode" resultType="Integer">
+        select max(areaCode) from stu_area_info
+        <where>
+            parentCode = #{parentCode}
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.ddky.fms.refund.model.students.entry.AreaInfo">
+        insert into stu_area_info (areaCode, areaName, parentCode, orderBy) values (#{areaCode}, #{areaName}, #{parentCode}, #{orderBy})
+    </insert>
+
+    <update id="update" parameterType="com.ddky.fms.refund.model.students.entry.AreaInfo">
+        update stu_area_info
+        <set>
+            <if test="areaName != null">
+                areaName = #{areaName},
+            </if>
+            <if test="parentCode != null">
+                parentCode = #{parentCode},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+        </set>
+        <where>
+            areaCode = #{areaCode}
+        </where>
+    </update>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into stu_area_info (areaCode, areaName, parentCode, orderBy)
+            values (#{item.areaCode}, #{item.areaName}, #{item.parentCode}, #{item.orderBy})
+        </foreach>
+    </insert>
+    
+    <delete id="delete" parameterType="integer">
+        delete from stu_area_info where areaCode=#{areaCode}
+    </delete>
+
+</mapper>

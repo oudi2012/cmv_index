@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ddky.fms.refund.mapper.userlogs.HomeWorkMapper">
+
+    <sql id="column">
+        homeWorkId, userId, schoolId, gradeId, classId, subjectId, workContent, indexImage, createDate, beginDate, endDate
+    </sql>
+
+    <sql id="where">
+        <if test="userId != null">
+            and userId = #{userId}
+        </if>
+        <if test="schoolId != null">
+            and schoolId = #{schoolId}
+        </if>
+        <if test="gradeId != null">
+            and gradeId = #{gradeId}
+        </if>
+        <if test="classId != null">
+            and classId = #{classId}
+        </if>
+        <if test="subjectId != null">
+            and subjectId = #{subjectId}
+        </if>
+    </sql>
+
+    <select id="list" resultType="com.ddky.fms.refund.model.userlogs.entry.HomeWork">
+        select
+            <include refid="column" />
+        from op_homework_info
+        <where>
+            <include refid="where" />
+        </where>
+    </select>
+
+    <select id="findById" resultType="com.ddky.fms.refund.model.userlogs.entry.HomeWork">
+        select
+            <include refid="column" />
+        from op_homework_info
+        <where>
+            homeWorkId = #{homeWorkId}
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.ddky.fms.refund.model.userlogs.entry.HomeWork">
+        insert into op_homework_info (userId, schoolId, gradeId, classId, subjectId, workContent, indexImage, createDate, beginDate, endDate)
+        values (#{userId}, #{schoolId}, #{gradeId}, #{classId}, #{subjectId}, #{workContent}, #{indexImage}, now(), #{beginDate}, #{endDate})
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into op_homework_info (userId, schoolId, gradeId, classId, subjectId, workContent, indexImage, createDate, beginDate, endDate)
+            values (#{item.userId}, #{item.schoolId}, #{item.gradeId}, #{item.classId}, #{item.subjectId}, #{item.workContent}, #{item.indexImage}, now(), #{item.beginDate}, #{item.endDate})
+        </foreach>
+    </insert>
+
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ddky.fms.refund.mapper.term.TermTeachersMapper">
+
+    <sql id="column">
+        id, teamId, schoolId, gradeId, classId, userId, bookId, bookCate, state, startTime, endTime, createTime
+    </sql>
+
+    <sql id="where">
+        <if test="schoolId != null">
+            and schoolId = #{schoolId}
+        </if>
+        <if test="teamId != null">
+            and teamId = #{teamId}
+        </if>
+        <if test="gradeId != null">
+            and gradeId = #{gradeId}
+        </if>
+        <if test="classId != null">
+            and classId = #{classId}
+        </if>
+        <if test="userId != null">
+            and userId = #{userId}
+        </if>
+    </sql>
+
+    <select id="list" resultType="com.ddky.fms.refund.model.term.entry.TermTeachers">
+        select
+            <include refid="column" />
+        from stu_term_teachers
+        <where>
+            <include refid="where" />
+        </where>
+    </select>
+
+    <select id="findById" resultType="com.ddky.fms.refund.model.term.entry.TermTeachers">
+        select
+            <include refid="column" />
+        from stu_term_teachers
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.ddky.fms.refund.model.term.entry.TermTeachers">
+        insert into stu_term_teachers (teamId, schoolId, gradeId, classId, userId, bookId, bookCate, state, startTime, endTime, createTime) values
+        (#{teamId}, #{schoolId}, #{gradeId}, #{classId}, #{userId}, #{bookId}, #{bookCate}, 10, #{startTime},  #{endTime}, now())
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into stu_term_teachers (teamId, schoolId, gradeId, classId, userId, bookId, bookCate, state, startTime, endTime, createTime)
+            values (#{item.teamId}, #{item.schoolId}, #{item.gradeId}, #{item.classId}, #{item.userId}, #{item.bookId}, #{item.bookCate},
+            10, #{item.startTime},  #{item.endTime}, now())
+        </foreach>
+    </insert>
+
+</mapper>

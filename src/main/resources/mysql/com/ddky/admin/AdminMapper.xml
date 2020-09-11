@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ddky.fms.refund.mapper.admin.AdminInfoMapper">
+
+    <sql id="column">
+        id, userName, passWord, areaId, headImage, realName, regDate, updateTime
+    </sql>
+
+    <sql id="where">
+        <if test="userName != null">and  userName = #{userName} </if>
+        <if test="areaId != null">and  areaId = #{areaId} </if>
+    </sql>
+
+    <select id="list" resultType="com.ddky.fms.refund.model.admin.entry.AdminInfo">
+        select
+            <include refid="column" />
+        from adm_user_info
+        <where>
+            <include refid="where" />
+        </where>
+    </select>
+
+    <select id="findOne" resultType="com.ddky.fms.refund.model.admin.entry.AdminInfo">
+        select
+        <include refid="column" />
+        from adm_user_info
+        <where>
+            <include refid="where" />
+        </where>
+        limit 1
+    </select>
+
+    <select id="listByUserNameList" parameterType="java.util.List" resultType="com.ddky.fms.refund.model.admin.entry.AdminInfo">
+        select
+        <include refid="column" />
+        from adm_user_info
+        <where>
+            userName in (
+            <foreach collection="list" index="index" item="item" separator=",">
+                #{item}
+            </foreach>)
+        </where>
+    </select>
+
+    <select id="findById" resultType="com.ddky.fms.refund.model.admin.entry.AdminInfo">
+        select
+            <include refid="column" />
+        from adm_user_info
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.ddky.fms.refund.model.admin.entry.AdminInfo">
+        insert into adm_user_info (userName, passWord, areaId, headImage, realName, role)
+        values (#{userName}, #{passWord}, #{areaId}, #{headImage}, #{realName}, #{role})
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into adm_user_info (userName, passWord, areaId, headImage, realName, role)
+            values (#{item.userName}, #{item.passWord}, #{item.areaId}, #{item.headImage}, #{item.realName}, #{item.role})
+        </foreach>
+    </insert>
+
+    <update id="edit" parameterType="com.ddky.fms.refund.model.admin.entry.AdminInfo">
+        update adm_user_info
+        <set>
+            <if test="userName != null">  userName = #{userName}, </if>
+            <if test="passWord != null">  passWord = #{passWord}, </if>
+            <if test="areaId != null">  areaId = #{areaId}, </if>
+            <if test="realName != null">  realName = #{realName}, </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+    
+    <delete id="delete" parameterType="java.util.List">
+        delete from adm_user_info where id in (
+        <foreach collection="idList" index="index" item="item" separator=",">
+            #{item}
+        </foreach>)
+    </delete>
+
+</mapper>

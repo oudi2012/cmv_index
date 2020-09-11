@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ddky.fms.refund.mapper.exam.SelectQuestionMapper">
+
+    <sql id="column">
+        id, subjectId, gradeId, multiId, title, qusType, examScope, creatorId, answers, hardLevelId, orderNo, createTime, updateTime
+    </sql>
+
+    <sql id="where">
+        <if test="title != null">
+            and title = #{title}
+        </if>
+        <if test="subjectId != null">
+            and subjectId = #{subjectId}
+        </if>
+        <if test="gradeId != null">
+            and gradeId = #{gradeId}
+        </if>
+        <if test="multiId != null">
+            and multiId = #{multiId}
+        </if>
+        <if test="qusType != null">
+            and qusType = #{qusType}
+        </if>
+        <if test="hardLevelId != null">
+            and hardLevelId = #{hardLevelId}
+        </if>
+    </sql>
+
+    <select id="list" resultType="com.ddky.fms.refund.model.exam.entry.SelectQuestion">
+        select
+            <include refid="column" />
+        from exam_select_questions
+        <where>
+            <include refid="where" />
+        </where>
+    </select>
+
+    <select id="findById" resultType="com.ddky.fms.refund.model.exam.entry.SelectQuestion">
+        select
+            <include refid="column" />
+        from exam_select_questions
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.ddky.fms.refund.model.exam.entry.SelectQuestion">
+        insert into exam_select_questions (subjectId, gradeId, multiId, title, qusType, examScope, creatorId, answers, hardLevelId)
+        values (#{subjectId}, #{gradeId}, #{multiId}, #{title}, #{qusType}, #{examScope}, #{creatorId}, #{answers}, #{hardLevelId})
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into exam_select_questions (subjectId, gradeId, multiId, title, qusType, examScope, creatorId, answers, hardLevelId)
+            values (#{item.subjectId}, #{item.gradeId}, #{item.multiId}, #{item.title}, #{item.qusType}, #{item.examScope}, #{item.creatorId}, #{item.answers}, #{item.hardLevelId})
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="com.ddky.fms.refund.model.exam.entry.SelectQuestion">
+        update exam_select_questions
+        <set>
+            <if test="subjectId != null">  subjectId = #{subjectId}, </if>
+            <if test="gradeId != null">  gradeId = #{gradeId}, </if>
+            <if test="multiId != null">  multiId = #{multiId}, </if>
+            <if test="title != null">  title = #{title}, </if>
+            <if test="qusType != null">  qusType = #{qusType}, </if>
+            <if test="examScope != null">  examScope = #{examScope}, </if>
+            <if test="creatorId != null">  creatorId = #{creatorId}, </if>
+            <if test="answers != null">  answers = #{answers}, </if>
+            <if test="hardLevelId != null">  hardLevelId = #{hardLevelId}, </if>
+            <if test="orderNo != null">  orderNo = #{orderNo}, </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <delete id="delete" parameterType="java.util.List">
+        delete from exam_select_questions where id in (
+        <foreach collection="idList" index="index" item="item" separator=",">
+            #{item}
+        </foreach>)
+    </delete>
+
+    <update id="deleteByMultiIds" parameterType="java.util.List">
+        update exam_select_questions
+        <set>
+            multiId = 0
+        </set>
+        <where>
+            multiId in
+            <foreach collection="idList" index="index" item="item" separator=",">
+                #{item}
+            </foreach>)
+        </where>
+    </update>
+
+</mapper>
