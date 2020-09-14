@@ -8,10 +8,8 @@ CREATE TABLE v_menu_info (
   isShow tinyint(1) DEFAULT 1 comment '是否显示 0否 1是',
   url varchar(200) DEFAULT NULL comment '连接地址',
   iconSrc varchar(200) DEFAULT NULL comment '图标',
-  regDate int(10) DEFAULT UNIX_TIMESTAMP(),
-  updateTime int(10) DEFAULT UNIX_TIMESTAMP(),
+  orderNo int(10) DEFAULT 0,
+  creator bigint(20) NOT NULL,
+  createTime int(10) DEFAULT 0,
   PRIMARY KEY (id)
-) ENGINE=innodb AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT '管理员';
-
-insert into adm_user_info(userName, passWord, areaId, headImage, realName, role)
-values ('admin','uS2mNFX6yio=',101,'aaa','root',1);
+) ENGINE=innodb AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT '菜单';
