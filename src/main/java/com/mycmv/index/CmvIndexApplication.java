@@ -13,14 +13,14 @@ import java.net.UnknownHostException;
 /**
  * @author a
  */
-@MapperScan("com.ddky.fms.refund.mapper")
+@MapperScan("com.mycmv.server.mapper")
 @SpringBootApplication
-public class DdkyFmsRefundApplication{
+public class CmvIndexApplication {
 
-	private static final Logger log = LoggerFactory.getLogger(DdkyFmsRefundApplication.class);
+	private static final Logger log = LoggerFactory.getLogger(CmvIndexApplication.class);
 
 	public static void main(String[] args) throws UnknownHostException {
-		SpringApplication app = new SpringApplication(DdkyFmsRefundApplication.class);
+		SpringApplication app = new SpringApplication(CmvIndexApplication.class);
 		Environment env = app.run(args).getEnvironment();
 		String protocol = "http";
 		if (env.getProperty("server.ssl.key-store") != null) {
