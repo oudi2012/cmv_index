@@ -30,7 +30,7 @@ import java.util.List;
 @RequestMapping("book")
 public class BookInfoController{
 
-    private static final Logger logger = LoggerFactory.getLogger(LogConstants.ADM_LOG);
+    private static final Logger logger = LoggerFactory.getLogger(LogConstants.STU_LOG);
 
     @Resource
     private BookInfoService bookInfoService;
