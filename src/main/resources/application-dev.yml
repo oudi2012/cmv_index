@@ -36,13 +36,11 @@ spring:
         max-wait: 10000
         min-idle: 0
 
+  elasticsearch:
+    rest:
+      uris: 192.168.41.126:9200
+      username: elastic
+      password: v7DUmYvDsBJZOgBAZXRi
+
 download:
   savePath: 'e:/images'
-
-# Elasticsearch
-elastic:
-  host: 192.168.41.125
-  port: 9300
-  pool: 5
-  cluster:
-    name: ddky-orders

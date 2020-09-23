@@ -30,6 +30,17 @@ spring:
     port: 6379
     password: 1q2w3e4r
     timeout: 3000
+    jedis:
+      pool:
+        max-idle: 20
+        max-wait: 6000
+        min-idle: 10
+
+  elasticsearch:
+    rest:
+      uris: 192.168.41.126:9300
+      username: elastic
+      password: v7DUmYvDsBJZOgBAZXRi
 
 download:
   savePath: '/data/images'
