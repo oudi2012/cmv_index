@@ -22,7 +22,7 @@ import javax.annotation.Resource;
  * @author a
  */
 @RestController
-@RequestMapping("elastic")
+@RequestMapping("elastic/index")
 public class ElasticIndexController {
 
     private static final Logger logger = LoggerFactory.getLogger(LogConstants.STU_LOG);
