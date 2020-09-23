@@ -30,10 +30,11 @@ public class ElasticIndexController {
     @Resource
     private ElasticService elasticService;
 
+    @UserLoginToken
     @ResponseBody
     @GetMapping("createBookInfoIndex")
-    public ResponseObject createBookInfoIndex() {
-        //logger.info("创建 BookInfo index,操作人:{}", user.getUserName());
+    public ResponseObject createBookInfoIndex(@CurrentUser AbstractUser user) {
+        logger.info("创建 BookInfo index,操作人:{}", user.getUserName());
         elasticService.createIndex(BookInfoEs.class);
         ResponseObject responseObject = new ResponseObject();
         CommonUtils.executeSuccess(responseObject);
