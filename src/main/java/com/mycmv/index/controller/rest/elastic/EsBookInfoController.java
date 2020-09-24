@@ -1,7 +1,6 @@
 package com.mycmv.index.controller.rest.elastic;
 
 import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.PageInfo;
 import com.mycmv.server.configuration.CurrentUser;
 import com.mycmv.server.configuration.UserLoginToken;
 import com.mycmv.server.constants.LogConstants;
@@ -11,18 +10,20 @@ import com.mycmv.server.model.base.vo.LongIdListVo;
 import com.mycmv.server.model.books.elastic.BookInfoEs;
 import com.mycmv.server.model.books.entry.BookInfo;
 import com.mycmv.server.model.books.vo.EsBookListVo;
-import com.mycmv.server.service.book.BookInfoElastic;
+import com.mycmv.server.service.InfoElasticService;
 import com.mycmv.server.service.book.BookInfoService;
 import com.mycmv.server.utils.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Collections;
-import java.util.List;
 
 /***
  * 书籍管理
@@ -35,7 +36,7 @@ public class EsBookInfoController {
     private static final Logger logger = LoggerFactory.getLogger(LogConstants.STU_LOG);
 
     @Resource
-    private BookInfoElastic bookInfoElastic;
+    private InfoElasticService<BookInfoEs> bookInfoElastic;
     @Resource
     private BookInfoService bookInfoService;
 
@@ -46,7 +47,8 @@ public class EsBookInfoController {
         String url = "elastic/book/pageList";
         logger.info("用户 {} ，访问 {} , 参数：{}，{}，{}", user.getUserName(), url, JSON.toJSON(bookItem), pageIndex, pageSize);
         ResponseObject responseObject = new ResponseObject();
-        PageInfo<BookInfoEs> pageInfo = bookInfoElastic.pageList(bookItem, pageIndex, pageSize);
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+        Page<BookInfoEs> pageInfo = bookInfoElastic.search(bookItem, pageable);
         logger.info("返回结果 list 条数：{}", pageInfo.getSize());
         CommonUtils.executeSuccess(responseObject, pageInfo);
         return responseObject;
@@ -60,13 +62,15 @@ public class EsBookInfoController {
         String url = "elastic/book/list";
         logger.info("用户 {} ，访问 {} , 参数：{}", user.getUserName(), url, JSON.toJSON(bookItem));
         ResponseObject responseObject = new ResponseObject();
-        List<BookInfoEs> list = bookInfoElastic.list(bookItem);
-        if (CollectionUtils.isEmpty(list)) {
+        Pageable pageable = PageRequest.of(1, 20);
+        Page<BookInfoEs> bookInfoEsPage = bookInfoElastic.search(bookItem, pageable);
+        if (CollectionUtils.isEmpty(bookInfoEsPage.getContent())) {
             logger.info("返回结果 list 条数：0");
+            CommonUtils.executeSuccess(responseObject);
         } else {
-            logger.info("返回结果 list 条数：{}", list.size());
+            logger.info("返回结果 list 条数：{}", bookInfoEsPage.getContent().size());
+            CommonUtils.executeSuccess(responseObject, bookInfoEsPage.getContent());
         }
-        CommonUtils.executeSuccess(responseObject, list);
         return responseObject;
     }
 
@@ -96,7 +100,7 @@ public class EsBookInfoController {
         String url = "elastic/book/create";
         logger.info("用户 {} ，访问 {} , 参数：{}", user.getUserName(), url, JSON.toJSON(item));
         ResponseObject responseObject = new ResponseObject();
-        bookInfoElastic.insert(item);
+        bookInfoElastic.insertOrUpdateOne(item);
         CommonUtils.executeSuccess(responseObject);
         return responseObject;
     }
@@ -109,7 +113,7 @@ public class EsBookInfoController {
         String url = "elastic/book/create";
         logger.info("用户 {} ，访问 {} , 参数：{}", user.getUserName(), url, JSON.toJSON(item));
         ResponseObject responseObject = new ResponseObject();
-        bookInfoElastic.update(item);
+        bookInfoElastic.insertOrUpdateOne(item);
         CommonUtils.executeSuccess(responseObject);
         return responseObject;
     }
@@ -122,7 +126,7 @@ public class EsBookInfoController {
         String url = "elastic/book/batchCreate";
         logger.info("用户 {} ，访问 {} , 数量：{}", user.getUserName(), url, bookListVo.getEsBookInfoList().size());
         ResponseObject responseObject = new ResponseObject();
-        bookInfoElastic.batchInsert(bookListVo.getEsBookInfoList());
+        bookInfoElastic.insertBatch(bookListVo.getEsBookInfoList());
         CommonUtils.executeSuccess(responseObject);
         return responseObject;
     }

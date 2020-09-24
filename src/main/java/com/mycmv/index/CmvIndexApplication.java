@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -16,6 +17,7 @@ import java.net.UnknownHostException;
  */
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.mycmv"})
+@EnableElasticsearchRepositories(basePackages = {"com.mycmv.server.service"})
 @MapperScan("com.mycmv.server.mapper")
 public class CmvIndexApplication {
 
