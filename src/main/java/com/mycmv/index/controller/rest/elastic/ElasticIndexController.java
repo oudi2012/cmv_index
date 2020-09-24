@@ -48,7 +48,8 @@ public class ElasticIndexController {
 
     @ResponseBody
     @GetMapping("createArticleInfoIndex")
-    public ResponseObject createArticleInfoIndex() {
+    public ResponseObject createArticleInfoIndex(@CurrentUser AbstractUser user) {
+        logger.info("创建 ArticleInfo index,操作人:{}", user.getUserName());
         articleInfoElastic.createIndex(ArticleInfoEs.class);
         ResponseObject responseObject = new ResponseObject();
         CommonUtils.executeSuccess(responseObject);

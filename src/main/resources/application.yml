@@ -6,14 +6,15 @@ spring:
 
 #分页pageHelper
 pagehelper:
-  helper-dialect: mysql
+  auto-dialect: true
   reasonable: true
   support-methods-arguments: true
 
+
 mybatis:
   #mysql 环境
-  mapperLocations: classpath:mysql/com/ddky/books/*.xml, classpath:mysql/com/ddky/images/*.xml, classpath:mysql/com/ddky/students/*.xml, classpath:mysql/com/ddky/userlogs/*.xml, classpath:mysql/com/ddky/term/*.xml, classpath:mysql/com/ddky/exam/*.xml, classpath:mysql/com/ddky/admin/*.xml
+  mapperLocations: classpath:mysql/com/mycmv/books/*.xml, classpath:mysql/com/mycmv/images/*.xml, classpath:mysql/com/mycmv/students/*.xml, classpath:mysql/com/mycmv/userlogs/*.xml, classpath:mysql/com/mycmv/term/*.xml, classpath:mysql/com/mycmv/exam/*.xml, classpath:mysql/com/mycmv/admin/*.xml
 logging:
   config: classpath:log4j2.xml
   level:
-    com.ddky.fms.refund.mapper: trace
+    com.mycmv.server.mapper: trace

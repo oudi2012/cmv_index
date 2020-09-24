@@ -1,6 +1,7 @@
 package com.mycmv.index.controller.rest.elastic;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageInfo;
 import com.mycmv.server.configuration.CurrentUser;
 import com.mycmv.server.configuration.UserLoginToken;
 import com.mycmv.server.constants.LogConstants;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /***
  * 书籍管理
@@ -143,5 +146,28 @@ public class EsBookInfoController {
         }
         CommonUtils.executeSuccess(resObj, bookInfoElastic.deleteByIds(longIdListVo.getIds()));
         return resObj;
+    }
+
+    @ResponseBody
+    @GetMapping("initData")
+    public ResponseObject initData() {
+        //String url = "elastic/book/pageList";
+        //logger.info("用户执行book elastic index 初始化操作 {} ，访问 {}", user.getUserName(), url);
+        ResponseObject responseObject = new ResponseObject();
+        AtomicBoolean has = new AtomicBoolean(true);
+        AtomicInteger pageIndex = new AtomicInteger(1);
+        while (has.get()) {
+            BookInfo bookParam = new BookInfo();
+            PageInfo<BookInfoEs> pageInfo = bookInfoService.pageListEs(bookParam, pageIndex.get(), 500);
+            pageIndex.getAndIncrement();
+            logger.info("返回结果 list 条数：{}", pageInfo.getSize());
+            if (CollectionUtils.isEmpty(pageInfo.getList())) {
+                has.set(false);
+            } else {
+                bookInfoElastic.insertBatch(pageInfo.getList());
+            }
+        }
+        CommonUtils.executeSuccess(responseObject);
+        return responseObject;
     }
 }

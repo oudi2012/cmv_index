@@ -17,7 +17,7 @@ import java.net.UnknownHostException;
  */
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.mycmv"})
-@EnableElasticsearchRepositories(basePackages = {"com.mycmv.server.service"})
+@EnableElasticsearchRepositories(basePackages = {"com.mycmv.server.esmapper"})
 @MapperScan("com.mycmv.server.mapper")
 public class CmvIndexApplication {
 
