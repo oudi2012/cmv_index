@@ -4,12 +4,15 @@ spring:
   application:
     name: fms-refund
 
-#分页pageHelper
 pagehelper:
-  auto-dialect: true
+  # 设置数据库类型
+  helperDialect: mysql
+  #开启合理化：页码<=0 查询第一页，页码>=总页数查询最后一页
   reasonable: true
-  support-methods-arguments: true
-
+  #支持通过 Mapper 接口参数来传递分页参数
+  supportMethodsArguments: true
+  # 参数  成员变量 = ${ xx}
+  params: count=countSql;offsetAsPageNum=true;rowBoundsWithCount=true;reasonable=true
 
 mybatis:
   #mysql 环境

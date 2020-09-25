@@ -159,13 +159,20 @@ public class EsBookInfoController {
         while (has.get()) {
             BookInfo bookParam = new BookInfo();
             PageInfo<BookInfoEs> pageInfo = bookInfoService.pageListEs(bookParam, pageIndex.get(), 500);
-            pageIndex.getAndIncrement();
-            logger.info("返回结果 list 条数：{}", pageInfo.getSize());
-            if (CollectionUtils.isEmpty(pageInfo.getList())) {
+            if (pageInfo.getPages() == 1) {
+                logger.info("返回结果 list 条数：{}", pageInfo.getSize());
+                if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+                    bookInfoElastic.insertBatch(pageInfo.getList());
+                }
                 has.set(false);
             } else {
-                bookInfoElastic.insertBatch(pageInfo.getList());
+                if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+                    bookInfoElastic.insertBatch(pageInfo.getList());
+                } else {
+                    has.set(false);
+                }
             }
+            pageIndex.getAndIncrement();
         }
         CommonUtils.executeSuccess(responseObject);
         return responseObject;
