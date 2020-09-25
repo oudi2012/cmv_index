@@ -16,7 +16,7 @@ pagehelper:
 
 mybatis:
   #mysql 环境
-  mapperLocations: classpath:mysql/com/mycmv/books/*.xml, classpath:mysql/com/mycmv/images/*.xml, classpath:mysql/com/mycmv/students/*.xml, classpath:mysql/com/mycmv/userlogs/*.xml, classpath:mysql/com/mycmv/term/*.xml, classpath:mysql/com/mycmv/exam/*.xml, classpath:mysql/com/mycmv/admin/*.xml, classpath:mysql/com/mycmv/article/*.xml
+  mapperLocations: classpath:mysql/com/mycmv/books/*.xml, classpath:mysql/com/mycmv/images/*.xml, classpath:mysql/com/mycmv/students/*.xml, classpath:mysql/com/mycmv/userlogs/*.xml, classpath:mysql/com/mycmv/term/*.xml, classpath:mysql/com/mycmv/exam/*.xml, classpath:mysql/com/mycmv/admin/*.xml, classpath:mysql/com/mycmv/article/*.xml, classpath:mysql/com/mycmv/banner/*.xml
 logging:
   config: classpath:log4j2.xml
   level:
